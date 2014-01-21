@@ -17,7 +17,7 @@ typedef enum {
     YOPA_SEGMENT,
     YOPA_FAT_PACKAGE,
     UNKNOWN
-} PackageType;
+} YOPAPackageType;
 
 struct yopa_segment {
     int16_t compression_type;
@@ -42,6 +42,8 @@ struct yopa_header {
     struct yopa_header _header;
     NSString* _tmpDir;
 }
+
+@property (readonly, nonatomic) YOPAPackageType packageType;
 
 - (id)initWithPackagePath:(NSString*) packagePath;
 - (NSString*) processPackage;

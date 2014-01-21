@@ -76,6 +76,32 @@ static NSString * genRandStringLength(int len) {
     return lipoPath;
 }
 
+- (YOPAPackageType)packageType
+{
+    static dispatch_once_t pred;
+    static YOPAPackageType type = UNKNOWN;
+    dispatch_once(&pred, ^{
+        if (_package == NULL) {
+            return;
+        }
+        
+        uint32_t magic;
+        fseek(_package, -4, SEEK_END);
+        fread(&magic, 4, 1, _package);
+        
+        if (magic == YOPA_HEADER_MAGIC) {
+            fseek(_package, -4 - sizeof(struct yopa_header), SEEK_END);
+            NSLog(@"YOPA fat Magic detected!");
+            type = YOPA_FAT_PACKAGE;
+        }
+        else if (magic == YOPA_SEGMENT_MAGIC) {
+            NSLog(@"segment magic detected!");
+            type = YOPA_SEGMENT_MAGIC;
+        }
+        NSLog(@"Couldn't find YOPA Magic.. huh");
+    });
+    return type;
+}
 
 -(NSString*) processPackage {
     switch (_header.segment_offsets[0]){
