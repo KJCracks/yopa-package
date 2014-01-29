@@ -4,8 +4,9 @@
 //
 
 #import "YOPAPackage.h"
+#ifndef CLUTCH_VERSION
 #import "LZMAExtractor.h"
-
+#endif
 static NSString * genRandStringLength(int len) {
     NSMutableString *randomString = [NSMutableString stringWithCapacity: len];
     NSString *letters = @"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
@@ -104,6 +105,7 @@ static NSString * genRandStringLength(int len) {
 }
 
 -(NSString*) processPackage {
+    #ifndef CLUTCH_VERSION
     switch (_header.segment_offsets[0]){
         case SEVENZIP_COMPRESSION: {
             NSLog(@"7zip compression, extracting");
@@ -132,6 +134,7 @@ static NSString * genRandStringLength(int len) {
             break;
         }
     }
+    #endif
     return nil;
 }
 
